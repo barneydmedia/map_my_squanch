@@ -68,14 +68,14 @@ mod tests {
       let opt = &BlockOption::new(5000, 1000);
       let block = block(opt).clone();
       let values = block.values();
-      let (x_sizex_size, y_size) = block.size();
+      let (x_size, y_size) = block.size();
 
-      assert_eq!(x_sizex_size, 5000);
+      assert_eq!(x_size, 5000);
       assert_eq!(y_size, 1000);
-      let mut img = image::RgbImage::new(x_sizex_size as u32, y_size as u32);
+      let mut img = image::RgbImage::new(x_size as u32, y_size as u32);
 
       for (x, y, pixel) in img.enumerate_pixels_mut() {
-        let block_val = values[(x as usize + (y as usize * x_sizex_size))] as f32;
+        let block_val = values[(x as usize + (y as usize * x_size))] as f32;
         let r = (5. * block_val).abs().ceil() as u8;
         let g = (2.2 * block_val).abs().ceil() as u8;
         let b = (2.2 * block_val).abs().ceil() as u8;
@@ -86,6 +86,6 @@ mod tests {
 
     #[test]
     fn test_map() {
-      let map = map(MapOption::new(2500, 1000));
+      let _ = map(MapOption::new(2500, 1000));
     }
 }
