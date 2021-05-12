@@ -11,31 +11,24 @@ mod map_collection;
 
 use noise::{Fbm, utils::NoiseMapBuilder, utils::*, OpenSimplex, Add, Seedable};
 use noise::utils::PlaneMapBuilder;
-use std::cell::{RefCell};
-use std::rc::{Rc};
 use std::sync::{RwLock, Arc, Mutex};
-use map_collection::{MapCollection2D, map2d::terrain_map2d::TerrainMap2D};
-use map_option::{MapOption};
-use block_options::{BlockOption};
 use rand::Rng;
 use rayon::prelude::*;
 use bencher::Bencher;
 
-
-
-impl MapGen {
-
-}
+use map_collection::{MapCollection2D, map2d::terrain_map2d::TerrainMap2D};
+use map_option::{MapOption};
+use block_options::{BlockOption};
 
 pub fn map_collection(x_size:usize, y_size:usize) -> MapCollection2D {
   return MapCollection2D::new(x_size, y_size);
 }
 
-pub fn map(options: MapOption) -> TerrainMap2D {
+fn map(options: MapOption) -> TerrainMap2D {
   return TerrainMap2D::new(options.x_size(), options.y_size());
 }
 
-pub fn block(options: &BlockOption) -> TerrainMap2D {
+fn block(options: &BlockOption) -> TerrainMap2D {
   let block_cell = Arc::new(Mutex::new(TerrainMap2D::new(options.x_size(), options.y_size())));
 
   let open_simplex = OpenSimplex::new();
