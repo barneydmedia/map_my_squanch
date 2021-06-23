@@ -2,6 +2,7 @@ pub mod map2d;
 
 use map2d::Map2D;
 use std::sync::{{RwLock, Arc}};
+use rayon::prelude::*;
 
 #[derive()]
 pub struct MapCollection2D {
@@ -40,7 +41,13 @@ impl MapCollection2D {
         self.y_size
     }
 
-    pub fn render(&self) -> &Self {
-        &self
+    pub fn render(&mut self, closures: &Vec<fn(&MapCollection2D)>) -> () {
+        (0..self.map.len()).into_par_iter().for_each(|map_offset| {
+            (0..self.size()).into_par_iter().for_each(|pixel_offset| {
+                (0..closures.len()).for_each(|closure_offset| {
+                    closures[closure_offset](&self);
+                });
+            });
+        });
     }
 }

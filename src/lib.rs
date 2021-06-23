@@ -26,6 +26,12 @@ mod tests {
     #[test]
     fn map_collection() {
       let map = new(1, 1);
+      let closures = vec!();
+
+      closures.push(&fn() {
+        
+      });
+
       map.render();
     }
 }
