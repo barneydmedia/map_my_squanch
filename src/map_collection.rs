@@ -51,7 +51,7 @@ impl MapCollection2D {
         });
     }
 
-    pub fn get(&self, x: usize, y: usize) -> Option<&mut Map2D> {
+    pub fn get(&mut self, x: usize, y: usize) -> Option<&mut Map2D> {
         let position = (y * self.x_size) + x;
         
         if (position >= 0 && position < self.size) {

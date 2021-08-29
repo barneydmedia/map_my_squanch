@@ -17,9 +17,11 @@ impl Map2D {
         }
     }
     
-    pub fn get(&self, x: usize, y: usize) -> Option<TerrainMap2D> {
+    pub fn get(&mut self, x: usize, y: usize) -> Option<&mut TerrainMap2D> {
         if x < 0 || y < 0 || x > self.block_x_size || y > self.block_y_size {
-            return Some(self.blocks[((y * self.block_x_size) + x)]);
+            let x_size = &self.block_x_size;
+
+            return Some(&mut self.blocks[((y * x_size) + x)]);
         } else {
             return None;
         }

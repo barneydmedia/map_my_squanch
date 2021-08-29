@@ -23,10 +23,6 @@ mod tests {
 
     #[test]
     fn map_collection() {
-      let mapCollection = new(10, 10);
-      map.render();
-
-      map.get(0,0);
-
+      new(10, 10);
     }
 }
