@@ -16,11 +16,11 @@ impl TerrainMap2D {
     }
   }
 
-  pub fn values(&self) -> Vec<i32> {
+  pub fn get(&self) -> Vec<i32> {
     return self.values.clone();
   }
 
-  pub fn set_value(&mut self, x:usize, y:usize, value: i32) {
+  pub fn set(&mut self, x:usize, y:usize, value: i32) {
     self.values[x + (y * &self.x_size)] = value;
   }
 

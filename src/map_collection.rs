@@ -9,7 +9,7 @@ pub struct MapCollection2D {
     size: usize,
     x_size: usize,
     y_size: usize,
-    map: Vec<Map2D>,
+    map2d: Vec<Map2D>,
 }
 
 impl MapCollection2D {
@@ -25,7 +25,7 @@ impl MapCollection2D {
             size: x_size * y_size,
             x_size: x_size,
             y_size: y_size,
-            map: map_vec,
+            map2d: map_vec,
         }
     }
 
@@ -42,12 +42,22 @@ impl MapCollection2D {
     }
 
     pub fn render(&mut self, closures: &Vec<fn(&MapCollection2D)>) -> () {
-        (0..self.map.len()).into_par_iter().for_each(|map_offset| {
+        (0..self.map2d.len()).into_par_iter().for_each(|map_offset| {
             (0..self.size()).into_par_iter().for_each(|pixel_offset| {
                 (0..closures.len()).for_each(|closure_offset| {
                     closures[closure_offset](&self);
                 });
             });
         });
+    }
+
+    pub fn get(&self, x: usize, y: usize) -> Option<&mut Map2D> {
+        let position = (y * self.x_size) + x;
+        
+        if (position >= 0 && position < self.size) {
+            return Some(&mut self.map2d[(y * self.x_size) + x]);
+        } else {
+            return None;
+        }
     }
 }
