@@ -1,4 +1,9 @@
-use noise::{NoiseFn, OpenSimplex};
+use noise::{OpenSimplex};
+use noise::utils::{PlaneMapBuilder, NoiseMapBuilder};
+use std::sync::Arc;
+use std::sync::Mutex;
+use rayon::prelude::*;
+use std::ops::{Deref, DerefMut};
 
 #[derive(Debug, Clone)]
 pub struct TerrainMap2D {
@@ -18,37 +23,30 @@ impl TerrainMap2D {
     }
   }
 
-  pub fn get(&self) -> Vec<i32> {
-    return self.values.clone();
-  }
-
   pub fn set(&mut self, x:usize, y:usize, value: i32) {
     self.values[x + (y * &self.x_size)] = value;
   }
 
-  pub fn value(&self, x:usize, y:usize) -> i32 {
+  pub fn get(&self, x:usize, y:usize) -> i32 {
     return self.values[x + (y * self.x_size)];
   }
 
   pub fn size(&self) -> (usize, usize) {
-    return (self.x_size, self.y_size);
+    return (self.x_size.clone(), self.y_size.clone());
   }
 
-  // pub fn addOpenSimplexNoise(&self) -> () {
-  //   let open_simplex = OpenSimplex::new();
-  //   let rand = rand::thread_rng().gen();
+  pub fn add_open_simplex_noise(&mut self) -> () {
+    let open_simplex = OpenSimplex::new();
+    let (map_x, map_y) = (self.x_size, self.y_size);
+    let map_size = map_x * map_y;
+    let render = PlaneMapBuilder::new(&open_simplex)
+      .set_size(self.x_size, self.y_size)
+      .build();
 
-  //   let (map_x, map_y) = render.size();
-  //   let map_size = (map_x * map_y) as i32;
-
-  //   (0..map_size).into_par_iter().for_each(|i| {
-  //     let x = i as usize % options.x_size();
-  //     let y = (i as usize - x)/options.x_size();
-  //     let val = (render.get_value(x,y) * 100 as f64).abs() as i32;
-  //     let mut block = block_cell.lock().unwrap();
-  //     block.set_value(x,y,val);
-  //   });
-
-  //   return block_cell.lock().unwrap().clone();
-  // }
+    (0..map_size).for_each(|i| {
+      let x = i as usize % self.x_size;
+      let y = (i as usize - x)/self.x_size;
+      self.values[x + (y * &self.x_size)] = (render.get_value(x,y) * 100 as f64).abs() as i32;
+    });
+  }
 }
