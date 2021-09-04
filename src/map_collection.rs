@@ -60,4 +60,16 @@ impl MapCollection2D {
             return None;
         }
     }
+
+    pub fn add_fbm_noise(&mut self) {
+        (0 .. self.map2d.len()).for_each(|i| {
+            self.add_fbm_noise();
+        });
+    }
+
+    pub fn add_open_simplex_noise(&mut self) {
+        (0 .. self.map2d.len()).for_each(|i| {
+            self.add_open_simplex_noise();
+        });
+    }
 }

@@ -26,4 +26,16 @@ impl Map2D {
             return None;
         }
     }
+
+    pub fn add_open_simplex_noise(&mut self) {
+        (0 .. self.blocks.len()).for_each(|i| {
+            self.blocks[i].add_open_simplex_noise();
+        });
+    }
+
+    pub fn add_fbm_noise(&mut self) {
+        (0 .. self.blocks.len()).for_each(|i| {
+            self.blocks[i].add_fbm_noise();
+        });
+    }
 }

@@ -23,6 +23,8 @@ mod tests {
 
     #[test]
     fn map_collection() {
-      new(10, 10);
+      let collection = &mut new(10, 10);
+      collection.add_open_simplex_noise();
+      collection.add_fbm_noise();
     }
 }
