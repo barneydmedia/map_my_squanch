@@ -21,7 +21,7 @@ mod tests {
 
     #[test]
     fn map_collection() {
-      let mut collection = Box::new(new(3, 3, 200, 200));
+      let collection = &mut new(3, 3, 200, 200);
       collection.add_open_simplex_noise();
       collection.add_fbm_noise();
     }
