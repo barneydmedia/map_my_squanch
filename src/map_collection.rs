@@ -10,15 +10,17 @@ pub struct MapCollection2D {
     x_size: usize,
     y_size: usize,
     map2d: Vec<Map2D>,
+    x_resolution: usize, 
+    y_resolution: usize,
 }
 
 impl MapCollection2D {
-    pub fn new(x_size: usize, y_size:usize) -> MapCollection2D {
+    pub fn new(x_size: usize, y_size:usize, x_resolution:usize, y_resolution:usize) -> MapCollection2D {
         let mut map_vec = Vec::new();
         let size = x_size * y_size;
 
         for i in 0..size {
-            map_vec.push(Map2D::new(x_size, y_size));
+            map_vec.push(Map2D::new(x_resolution, y_resolution));
         }
         
         MapCollection2D {
@@ -26,6 +28,8 @@ impl MapCollection2D {
             x_size: x_size,
             y_size: y_size,
             map2d: map_vec,
+            x_resolution: x_resolution,
+            y_resolution: y_resolution,
         }
     }
 
@@ -54,7 +58,7 @@ impl MapCollection2D {
     pub fn get(&mut self, x: usize, y: usize) -> Option<&mut Map2D> {
         let position = (y * self.x_size) + x;
         
-        if (position >= 0 && position < self.size) {
+        if position >= 0 && position < self.size {
             return Some(&mut self.map2d[(y * self.x_size) + x]);
         } else {
             return None;
@@ -63,13 +67,13 @@ impl MapCollection2D {
 
     pub fn add_fbm_noise(&mut self) {
         (0 .. self.map2d.len()).for_each(|i| {
-            self.add_fbm_noise();
+            self.map2d[i].add_fbm_noise();
         });
     }
 
     pub fn add_open_simplex_noise(&mut self) {
-        (0 .. self.map2d.len()).for_each(|i| {
-            self.add_open_simplex_noise();
+        (0 .. self.map2d.len()).for_each(|i: usize| {
+            self.map2d[i].add_open_simplex_noise();
         });
     }
 }
