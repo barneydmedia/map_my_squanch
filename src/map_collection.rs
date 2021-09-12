@@ -4,28 +4,20 @@ use map2d::Map2D;
 use rayon::prelude::*;
 use chrono::prelude::*;
 
-use self::map2d::terrain_map2d::TerrainMap2D;
-
 #[derive()]
 pub struct MapCollection2D {
     size: usize,
     x_size: usize,
     y_size: usize,
     map2d: Vec<Map2D>,
-    x_resolution: usize, 
-    y_resolution: usize,
 }
 
 impl MapCollection2D {
-    fn flatten<T>(nested: Vec<Vec<T>>) -> Vec<T> {
-        nested.into_iter().flatten().collect()
-    }
-
     pub fn new(x_size: usize, y_size:usize, x_resolution:usize, y_resolution:usize) -> MapCollection2D {
         let mut map_vec = Vec::new();
         let size = x_size * y_size;
 
-        for i in 0..size {
+        for _ in 0..size {
             map_vec.push(Map2D::new(x_resolution, y_resolution));
         }
         
@@ -34,8 +26,6 @@ impl MapCollection2D {
             x_size: x_size,
             y_size: y_size,
             map2d: map_vec,
-            x_resolution: x_resolution,
-            y_resolution: y_resolution,
         }
     }
 
@@ -52,8 +42,8 @@ impl MapCollection2D {
     }
 
     pub fn render(&mut self, closures: &Vec<fn(&MapCollection2D)>) -> () {
-        (0..self.map2d.len()).into_par_iter().for_each(|map_offset| {
-            (0..self.size()).into_par_iter().for_each(|pixel_offset| {
+        (0..self.map2d.len()).into_par_iter().for_each(|_| {
+            (0..self.size()).into_par_iter().for_each(|_| {
                 (0..closures.len()).for_each(|closure_offset| {
                     closures[closure_offset](&self);
                 });
@@ -64,11 +54,11 @@ impl MapCollection2D {
     pub fn get(&mut self, x: usize, y: usize) -> Option<&mut Map2D> {
         let position = (y * self.x_size) + x;
         
-        if position >= 0 && position < self.size {
-            return Some(&mut self.map2d[(y * self.x_size) + x]);
-        } else {
+        if position >= self.size {
             return None;
         }
+
+        return Some(&mut self.map2d[(y * self.x_size) + x]);
     }
 
     pub fn add_fbm_noise(&mut self) {

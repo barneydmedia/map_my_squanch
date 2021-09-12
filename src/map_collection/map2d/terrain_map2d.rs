@@ -1,9 +1,5 @@
 use noise::{Fbm, OpenSimplex};
 use noise::utils::{PlaneMapBuilder, NoiseMapBuilder};
-use std::sync::Arc;
-use std::sync::Mutex;
-use rayon::prelude::*;
-use std::ops::{Deref, DerefMut};
 
 #[derive(Debug, Clone)]
 pub struct TerrainMap2D {

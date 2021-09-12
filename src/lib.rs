@@ -8,7 +8,6 @@ extern crate bencher;
 mod map_option;
 mod map_collection;
 
-use bencher::Bencher;
 use map_collection::MapCollection2D;
 
 pub fn new(x_size:usize, y_size:usize, x_resolution:usize, y_resolution:usize) -> MapCollection2D {
