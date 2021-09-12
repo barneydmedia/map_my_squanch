@@ -1,15 +1,15 @@
-pub mod map2d;
+pub mod terrain_map2d;
 
-use map2d::Map2D;
 use rayon::prelude::*;
 use chrono::prelude::*;
+use terrain_map2d::TerrainMap2D;
 
 #[derive()]
 pub struct MapCollection2D {
     size: usize,
     x_size: usize,
     y_size: usize,
-    map2d: Vec<Map2D>,
+    map2d: Vec<TerrainMap2D>,
 }
 
 impl MapCollection2D {
@@ -18,7 +18,7 @@ impl MapCollection2D {
         let size = x_size * y_size;
 
         for _ in 0..size {
-            map_vec.push(Map2D::new(x_resolution, y_resolution));
+            map_vec.push(TerrainMap2D::new(x_resolution, y_resolution));
         }
         
         MapCollection2D {
@@ -51,7 +51,7 @@ impl MapCollection2D {
         });
     }
 
-    pub fn get(&mut self, x: usize, y: usize) -> Option<&mut Map2D> {
+    pub fn get(&mut self, x: usize, y: usize) -> Option<&mut TerrainMap2D> {
         let position = (y * self.x_size) + x;
         
         if position >= self.size {
