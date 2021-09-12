@@ -31,6 +31,10 @@ impl TerrainMap2D {
     return self.values[x + (y * self.x_size)];
   }
 
+  pub fn rasterize(&self) -> Vec<i32> {
+    self.values.clone()
+  }
+
   pub fn size(&self) -> (usize, usize) {
     return (self.x_size.clone(), self.y_size.clone());
   }

@@ -1,8 +1,11 @@
 pub mod terrain_map2d;
 
 use terrain_map2d::TerrainMap2D;
+
 #[derive(Debug, Clone)]
 pub struct Map2D {
+  iterator_current: usize,
+  iterator_next: usize,
   blocks: Vec<TerrainMap2D>,
   block_x_size: usize,
   block_y_size: usize,
@@ -14,6 +17,8 @@ impl Map2D {
             blocks: vec!(TerrainMap2D::new(x_size, y_size)),
             block_x_size: x_size,
             block_y_size: y_size,
+            iterator_current: 0,
+            iterator_next: 1,
         }
     }
     
@@ -37,5 +42,34 @@ impl Map2D {
         (0 .. self.blocks.len()).for_each(|i| {
             self.blocks[i].add_fbm_noise();
         });
+    }
+
+    pub fn rasterize(&self) -> Vec<i32> {
+        let mut raster  = vec![];
+        (0 .. self.blocks.len()).for_each(|i| {
+            let value_set = self.blocks[i].rasterize();
+
+            for value in value_set {
+                raster.push(value);
+            }
+        });
+
+        return raster;
+    }
+}
+
+impl Iterator for Map2D {
+    type Item = TerrainMap2D;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.iterator_next >= self.blocks.len() {
+            return None;
+        }
+
+        let result = &self.blocks[self.iterator_current];
+        self.iterator_current = self.iterator_next;
+        self.iterator_next = self.iterator_next + 1;
+
+        return Some(result.clone());
     }
 }

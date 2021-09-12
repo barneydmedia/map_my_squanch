@@ -24,5 +24,6 @@ mod tests {
       let collection = &mut new(3, 3, 200, 200);
       collection.add_open_simplex_noise();
       collection.add_fbm_noise();
+      collection.render_image();
     }
 }

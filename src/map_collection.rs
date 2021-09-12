@@ -1,8 +1,10 @@
 pub mod map2d;
 
 use map2d::Map2D;
-use std::sync::{{RwLock, Arc}};
 use rayon::prelude::*;
+use chrono::prelude::*;
+
+use self::map2d::terrain_map2d::TerrainMap2D;
 
 #[derive()]
 pub struct MapCollection2D {
@@ -15,6 +17,10 @@ pub struct MapCollection2D {
 }
 
 impl MapCollection2D {
+    fn flatten<T>(nested: Vec<Vec<T>>) -> Vec<T> {
+        nested.into_iter().flatten().collect()
+    }
+
     pub fn new(x_size: usize, y_size:usize, x_resolution:usize, y_resolution:usize) -> MapCollection2D {
         let mut map_vec = Vec::new();
         let size = x_size * y_size;
@@ -72,8 +78,37 @@ impl MapCollection2D {
     }
 
     pub fn add_open_simplex_noise(&mut self) {
-        (0 .. self.map2d.len()).for_each(|i: usize| {
+        (0 .. self.map2d.len()).for_each(|i| {
             self.map2d[i].add_open_simplex_noise();
         });
+    }
+
+    pub fn rasterize(&self) -> Vec<i32> {
+        let mut raster = vec!();
+        
+        for map in &self.map2d {
+            for value in map.rasterize() {
+                raster.push(value);
+            }
+        }
+
+        return raster;
+    }
+
+
+    pub fn render_image(&self) {
+        let mut img = image::RgbImage::new(self.x_size as u32, self.y_size as u32);
+        let values = self.rasterize();
+
+        for (x, y, pixel) in img.enumerate_pixels_mut() {
+            let block_val = values[(x as usize + (y as usize * self.x_size))] as f32;
+            let r = (5. * block_val).abs().ceil() as u8;
+            let g = (2.2 * block_val).abs().ceil() as u8;
+            let b = (2.2 * block_val).abs().ceil() as u8;
+            *pixel = image::Rgb([r, g, b]);
+        }
+        let datetime = Local::now();
+        let time = datetime.to_rfc3339_opts(SecondsFormat::Secs, true);
+        img.save(format!("test_images/{}-{}.png", time, uuid::Uuid::new_v4())).unwrap();
     }
 }
