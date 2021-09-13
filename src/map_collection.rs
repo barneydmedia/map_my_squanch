@@ -77,7 +77,8 @@ impl MapCollection2D {
         let mut raster = vec!();
         
         for map in &self.map2d {
-            for value in map.rasterize() {
+            let value_map = map.rasterize();
+            for value in value_map {
                 raster.push(value);
             }
         }
@@ -85,9 +86,9 @@ impl MapCollection2D {
         return raster;
     }
 
-
     pub fn render_image(&self) {
-        let mut img = image::RgbImage::new(self.x_size as u32, self.y_size as u32);
+        let (resolution_x, resolution_y) = self.map2d[0].size();
+        let mut img = image::RgbImage::new((self.x_size * resolution_x) as u32, (self.y_size * resolution_y) as u32);
         let values = self.rasterize();
 
         for (x, y, pixel) in img.enumerate_pixels_mut() {

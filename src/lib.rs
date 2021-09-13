@@ -5,7 +5,6 @@ pub struct MapGen;
 
 extern crate bencher;
 
-mod map_option;
 mod map_collection;
 
 use map_collection::MapCollection2D;
