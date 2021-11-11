@@ -23,8 +23,16 @@ impl TerrainMap2D {
     self.values[x + (y * &self.x_size)] = value;
   }
 
+  pub fn set_by_index(&mut self, index: usize, value: i32) {
+    self.values[index] = value;
+  }
+
   pub fn get(&self, x:usize, y:usize) -> i32 {
     return self.values[x + (y * self.x_size)];
+  }
+
+  pub fn get_by_index(&self, index: usize) -> i32 {
+    self.values[index]
   }
 
   pub fn rasterize(&self) -> Vec<i32> {

@@ -3,6 +3,7 @@ pub mod terrain_map2d;
 use rayon::prelude::*;
 use chrono::prelude::*;
 use terrain_map2d::TerrainMap2D;
+use std::sync::RwLock;
 
 #[derive()]
 pub struct MapCollection2D {
@@ -41,11 +42,16 @@ impl MapCollection2D {
         self.y_size
     }
 
-    pub fn render(&mut self, closures: &Vec<fn(&MapCollection2D)>) -> () {
-        (0..self.map2d.len()).into_par_iter().for_each(|_| {
-            (0..self.size()).into_par_iter().for_each(|_| {
+    pub fn render(&mut self, closures: &Vec<RwLock<Box<fn(i32) -> i32>>>) -> () {
+        (0..self.map2d.len()).for_each(|map_offset| {
+            (0..self.size()).for_each(|iterator_offset| {
                 (0..closures.len()).for_each(|closure_offset| {
-                    closures[closure_offset](&self);
+                    let lock = &closures[closure_offset].read().unwrap();
+                    let closure = &*lock;
+                    let value = self.map2d[map_offset].get_by_index(iterator_offset);
+
+                    // [iterator_offset][closure_offset]
+                    self.map2d[map_offset].set_by_index(iterator_offset, closure(value));
                 });
             });
         });
