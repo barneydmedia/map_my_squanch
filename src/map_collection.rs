@@ -79,11 +79,11 @@ impl MapCollection2D {
         });
     }
 
-    pub fn rasterize(&self) -> Vec<f64> {
+    pub fn get_values(&self) -> Vec<f64> {
         let mut raster = vec!();
         
         for map in &self.map2d {
-            let value_map = map.rasterize();
+            let value_map = map.get_values();
             for value in value_map {
                 raster.push(value);
             }
@@ -95,7 +95,7 @@ impl MapCollection2D {
     pub fn render_image(&self) {
         let (resolution_x, resolution_y) = self.map2d[0].size();
         let mut img = image::RgbImage::new((self.x_size * resolution_x) as u32, (self.y_size * resolution_y) as u32);
-        let values = self.rasterize();
+        let values = self.get_values();
 
         for (x, y, pixel) in img.enumerate_pixels_mut() {
             let block_val = values[(x as usize + (y as usize * self.x_size))] as f32;

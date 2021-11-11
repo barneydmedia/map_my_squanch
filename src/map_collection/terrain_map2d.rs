@@ -35,7 +35,7 @@ impl TerrainMap2D {
     self.values[index]
   }
 
-  pub fn rasterize(&self) -> Vec<f64> {
+  pub fn get_values(&self) -> Vec<f64> {
     self.values.clone()
   }
 
