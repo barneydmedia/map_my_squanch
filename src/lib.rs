@@ -20,12 +20,12 @@ mod tests {
 
     #[test]
     fn map_collection() {
-      fn update_value(value: i32) -> (i32) {
-        value * 2
+      fn update_value(value: f64) -> f64 {
+        value * 1.2
       }
 
       let shaders = &mut vec![];
-      shaders.push(RwLock::new(Box::new(update_value as fn(i32) -> i32)));
+      shaders.push(RwLock::new(Box::new(update_value as fn(f64) -> f64)));
       
       let collection = &mut new(3, 3, 200, 200);
       collection.add_open_simplex_noise();

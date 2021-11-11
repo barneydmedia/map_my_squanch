@@ -3,14 +3,14 @@ use noise::utils::{PlaneMapBuilder, NoiseMapBuilder};
 
 #[derive(Debug, Clone)]
 pub struct TerrainMap2D {
-  values: Vec<i32>,
+  values: Vec<f64>,
   x_size: usize,
   y_size: usize,
 }
 
 impl TerrainMap2D {
   pub fn new(x_size:usize, y_size: usize) -> Self {
-    let vec = vec![0; y_size * x_size];
+    let vec = vec![0.0; y_size * x_size];
 
     TerrainMap2D {
       values: vec,
@@ -19,23 +19,23 @@ impl TerrainMap2D {
     }
   }
 
-  pub fn set(&mut self, x:usize, y:usize, value: i32) {
+  pub fn set(&mut self, x:usize, y:usize, value: f64) {
     self.values[x + (y * &self.x_size)] = value;
   }
 
-  pub fn set_by_index(&mut self, index: usize, value: i32) {
+  pub fn set_by_index(&mut self, index: usize, value: f64) {
     self.values[index] = value;
   }
 
-  pub fn get(&self, x:usize, y:usize) -> i32 {
+  pub fn get(&self, x:usize, y:usize) -> f64 {
     return self.values[x + (y * self.x_size)];
   }
 
-  pub fn get_by_index(&self, index: usize) -> i32 {
+  pub fn get_by_index(&self, index: usize) -> f64 {
     self.values[index]
   }
 
-  pub fn rasterize(&self) -> Vec<i32> {
+  pub fn rasterize(&self) -> Vec<f64> {
     self.values.clone()
   }
 
@@ -54,7 +54,7 @@ impl TerrainMap2D {
     (0..map_size).for_each(|i| {
       let x = i as usize % self.x_size;
       let y = (i as usize - x)/self.x_size;
-      self.values[x + (y * &self.x_size)] = (render.get_value(x,y) * 100 as f64).abs() as i32;
+      self.values[x + (y * &self.x_size)] = (render.get_value(x,y) * 100 as f64).abs() as f64;
     });
   }
 
@@ -69,7 +69,7 @@ impl TerrainMap2D {
     (0..map_size).for_each(|i| {
       let x = i as usize % self.x_size;
       let y = (i as usize - x)/self.x_size;
-      self.values[x + (y * &self.x_size)] = (render.get_value(x,y) * 100 as f64).abs() as i32;
+      self.values[x + (y * &self.x_size)] = (render.get_value(x,y) * 100 as f64).abs() as f64;
     });
   }
 }

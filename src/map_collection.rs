@@ -42,7 +42,7 @@ impl MapCollection2D {
         self.y_size
     }
 
-    pub fn render(&mut self, closures: &Vec<RwLock<Box<fn(i32) -> i32>>>) -> () {
+    pub fn render(&mut self, closures: &Vec<RwLock<Box<fn(f64) -> f64>>>) -> () {
         (0..self.map2d.len()).for_each(|map_offset| {
             (0..self.size()).for_each(|iterator_offset| {
                 (0..closures.len()).for_each(|closure_offset| {
@@ -79,7 +79,7 @@ impl MapCollection2D {
         });
     }
 
-    pub fn rasterize(&self) -> Vec<i32> {
+    pub fn rasterize(&self) -> Vec<f64> {
         let mut raster = vec!();
         
         for map in &self.map2d {
