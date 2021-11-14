@@ -31,6 +31,6 @@ mod tests {
       collection.add_open_simplex_noise();
       collection.add_fbm_noise();
       collection.render(shaders);
-      collection.render_image();
+      collection.render_image(30);
     }
 }
