@@ -21,16 +21,17 @@ mod tests {
     #[test]
     fn map_collection() {
       fn update_value(value: f64) -> f64 {
-        value * 1.2
+        value * 100.0
       }
 
       let shaders = &mut vec![];
       shaders.push(RwLock::new(Box::new(update_value as fn(f64) -> f64)));
       
-      let collection = &mut new(3, 3, 200, 200);
+      let collection = &mut new(3, 3, 100, 100);
       collection.add_open_simplex_noise();
       collection.add_fbm_noise();
       collection.render(shaders);
       collection.render_image(30);
+      collection.render_graph();
     }
 }
