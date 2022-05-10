@@ -167,29 +167,29 @@ impl MapCollection2D {
         let min = *sorted.first().unwrap();
         let max = *sorted.last().unwrap();
         let value_range = max - min.abs();
+        let mut data_points = vec!();
 
         root.fill(&WHITE).unwrap();
-        let random_points: Vec<(f64, f64)> = {
+        let random_points: &Vec<(f64, f64)> = {
             let values = self.get_values();
-            let mut data_points = vec!();
 
             values.iter().enumerate().for_each(|(iter, val)| {
                 data_points.push((iter as f64, *val));
             });
 
-            data_points
+            &data_points
         };
 
-        let areas = root.split_by_breakpoints([944], [80]);
+        let areas = root.split_by_breakpoints([944 as i32], [80 as i32]);
         let mut x_hist_ctx = ChartBuilder::on(&areas[0])
-            .y_label_area_size(40)
-            .build_cartesian_2d((0.0..1.0).step(0.01).use_round().into_segmented(), 0..250).unwrap();
+            .y_label_area_size(40 as i32)
+            .build_cartesian_2d((0.0..values.len() as f64).step((values.len() / 10) as f64).use_round().into_segmented(), 0.0..values.len() as f64).unwrap();
         let mut y_hist_ctx = ChartBuilder::on(&areas[3])
-            .x_label_area_size(40)
-            .build_cartesian_2d(0..250, (0.0..1.0).step(0.01).use_round()).unwrap();
+            .x_label_area_size(40 as i32)
+            .build_cartesian_2d(0..250 as i32, (0.0..max).step(value_range / 10.0).use_round()).unwrap();
         let mut scatter_ctx = ChartBuilder::on(&areas[2])
-            .x_label_area_size(40)
-            .y_label_area_size(40)
+            .x_label_area_size(40 as i32)
+            .y_label_area_size(40 as i32)
             .build_cartesian_2d(0f64..1f64, 0f64..1f64).unwrap();
         scatter_ctx
             .configure_mesh()
@@ -200,12 +200,13 @@ impl MapCollection2D {
         scatter_ctx.draw_series(
             random_points
                 .iter()
-                .map(|(x, y)| Circle::new((*x, *y), 2, GREEN.filled())),
+                .map(|(x, y)| Circle::new((*x, *y), 2 as i32, GREEN.filled())),
         ).unwrap();
+        let y_value = 1.0;
         let x_hist = Histogram::vertical(&x_hist_ctx)
             .style(GREEN.filled())
             .margin(0)
-            .data(random_points.iter().map(|(x, _)| (*x, 1)));
+            .data(random_points.iter().map(|(x, _)| {(*x, y_value)}));
         let y_hist = Histogram::horizontal(&y_hist_ctx)
             .style(GREEN.filled())
             .margin(0)

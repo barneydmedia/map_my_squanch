@@ -21,7 +21,7 @@ mod tests {
     #[test]
     fn map_collection() {
       fn update_value(value: f64) -> f64 {
-        value * 100.0
+        value * 100000.0
       }
 
       let shaders = &mut vec![];
