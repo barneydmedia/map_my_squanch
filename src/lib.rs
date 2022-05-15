@@ -8,7 +8,6 @@ extern crate bencher;
 mod map_collection;
 
 use map_collection::MapCollection2D;
-use std::sync::RwLock;
 
 pub fn new(x_size:usize, y_size:usize, x_resolution:usize, y_resolution:usize) -> MapCollection2D {
   return MapCollection2D::new(x_size, y_size, x_resolution, y_resolution);
@@ -25,7 +24,7 @@ mod tests {
       }
 
       let shaders = &mut vec![];
-      shaders.push(RwLock::new(Box::new(update_value as fn(f64) -> f64)));
+      shaders.push(std::sync::RwLock::new(Box::new(update_value as fn(f64) -> f64)));
       
       let collection = &mut new(3, 3, 100, 100);
       collection.add_open_simplex_noise();

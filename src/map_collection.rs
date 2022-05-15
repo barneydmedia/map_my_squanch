@@ -1,6 +1,5 @@
 pub mod terrain_map2d;
 
-use rayon::prelude::*;
 use chrono::prelude::*;
 use plotters::prelude::*;
 use terrain_map2d::TerrainMap2D;
@@ -141,7 +140,7 @@ impl MapCollection2D {
             let value_index = (y as usize * self.x_size) + x as usize;
             let mut value = *values.last().unwrap();
 
-            if (value_index < values.len()) {
+            if value_index < values.len() {
                 value = values[value_index];
             }
 
